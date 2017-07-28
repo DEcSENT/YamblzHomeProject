@@ -4,6 +4,23 @@ def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'me.tatarka:gradle-retrolambda:3.7.0'
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -28,27 +45,43 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-        debug { // тип сборки
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        debug {
         }
+    }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
     }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+
     compile "com.android.support:appcompat-v7:$rootProject.support_version"
     compile "com.android.support:design:$rootProject.support_version"
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    testCompile 'junit:junit:4.12'
+
+    compile "com.android.support.constraint:constraint-layout:$rootProject.constraint_layout_version"
 
     compile "com.jakewharton:butterknife:$rootProject.butterknife_version"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterknife_version"
+
     compile "com.squareup.retrofit2:retrofit:$rootProject.retrofit_version"
-    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
-    compile 'com.evernote:android-job:1.1.11'
-    compile "com.google.android.gms:play-services-gcm:10.2.6"
+    compile "com.squareup.retrofit2:converter-gson:$rootProject.gson_converter_version"
+    compile "com.squareup.retrofit2:adapter-rxjava2:$rootProject.retrofit_version"
+
+    compile "com.evernote:android-job:$rootProject.androidjob_version"
+
+    compile "com.google.android.gms:play-services-gcm:$rootProject.services_gcm_version"
+
+    compile "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroid_version"
+    compile "io.reactivex.rxjava2:rxjava:$rootProject.rxjava_version"
+    compile "com.jakewharton.rxbinding2:rxbinding:$rootProject.rxbindings_version"
+
+    compile "com.google.dagger:dagger:$rootProject.dagger2_version"
+    annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.dagger2_version"
+    provided "javax.annotation:jsr250-api:$rootProject.javaannotation_version"
+
+    compile "com.arello-mobile:moxy:$rootProject.moxy_version"
+    compile "com.arello-mobile:moxy-app-compat:$rootProject.moxy_version"
+    annotationProcessor "com.arello-mobile:moxy-compiler:$rootProject.moxy_version"
 }

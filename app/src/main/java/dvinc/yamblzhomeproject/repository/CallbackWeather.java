@@ -4,9 +4,10 @@ package dvinc.yamblzhomeproject.repository;
  * 19.07.2017
  */
 
-import dvinc.yamblzhomeproject.repository.model.WeatherResponse;
+import dvinc.yamblzhomeproject.repository.model.weather.WeatherResponse;
 
 public interface CallbackWeather {
     void onSuccess(WeatherResponse weatherResponse);
+
     void onError();
 }

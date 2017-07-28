@@ -11,41 +11,52 @@ import android.support.annotation.NonNull;
 
 import com.evernote.android.job.JobManager;
 
-import dvinc.yamblzhomeproject.net.RetrofitApi;
+import dvinc.yamblzhomeproject.di.AppComponent;
+import dvinc.yamblzhomeproject.di.DaggerAppComponent;
+import dvinc.yamblzhomeproject.di.modules.ApplicationModule;
+import dvinc.yamblzhomeproject.net.WeatherApi;
 import dvinc.yamblzhomeproject.net.background.BGJobCreator;
 import dvinc.yamblzhomeproject.net.background.BGSyncJob;
-import dvinc.yamblzhomeproject.repository.RepositoryImpl;
+import dvinc.yamblzhomeproject.repository.WeatherRepositoryImpl;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class App extends Application {
 
-    private Retrofit retrofit;
-    private RetrofitApi api;
-    private static final String BASE_URL = "http://api.openweathermap.org/";
+    private static AppComponent appComponent;
 
-    private RepositoryImpl repositoryImpl;
+    private WeatherApi api;
+    private static final String BASE_URL = "http://api.openweathermap.org/data/2.5/";
+
+    private WeatherRepositoryImpl repositoryImpl;
 
     public static App get(@NonNull Context context) {
         return (App) context.getApplicationContext();
     }
 
-    public RetrofitApi getApi() {
+    public WeatherApi getApi() {
         return api;
     }
 
-    public RepositoryImpl getRepositoryImpl(){
+    public WeatherRepositoryImpl getRepositoryImpl() {
         return repositoryImpl;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        retrofit = new Retrofit.Builder()
+
+        appComponent = DaggerAppComponent.builder()
+                .applicationModule(new ApplicationModule(getApplicationContext()))
+                .build();
+
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        api = retrofit.create(RetrofitApi.class);
+
+        api = retrofit.create(WeatherApi.class);
+
         JobManager.create(this).addJobCreator(new BGJobCreator());
         SharedPreferences str = getApplicationContext().getSharedPreferences("SETTINGS", MODE_PRIVATE);
 
@@ -59,6 +70,10 @@ public class App extends Application {
             BGSyncJob.schedulePeriodic(15);
         }
 
-        repositoryImpl = new RepositoryImpl();
+        repositoryImpl = new WeatherRepositoryImpl();
+    }
+
+    public static AppComponent getComponent() {
+        return appComponent;
     }
 }

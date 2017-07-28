@@ -6,9 +6,6 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
     }
 }
 
@@ -27,4 +24,14 @@ ext{
     support_version = "25.3.1"
     retrofit_version = "2.2.0"
     butterknife_version = "8.7.0"
+    constraint_layout_version = "1.0.2"
+    androidjob_version = "1.1.11"
+    gson_converter_version = "2.0.2"
+    services_gcm_version = "11.0.2"
+    rxandroid_version = "2.0.1"
+    rxjava_version = "2.1.0"
+    rxbindings_version = "2.0.0"
+    dagger2_version = '2.9'
+    javaannotation_version = '1.0'
+    moxy_version = '1.5.3'
 }
