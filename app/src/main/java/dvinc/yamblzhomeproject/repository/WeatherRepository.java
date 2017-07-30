@@ -1,18 +1,15 @@
 package dvinc.yamblzhomeproject.repository;
 
-import android.content.Context;
-
 import dvinc.yamblzhomeproject.repository.model.weather.WeatherResponse;
+import io.reactivex.Observable;
 
 /*
  * Created by DV on Space 5 
  * 19.07.2017
  */
-interface WeatherRepository {
+public interface WeatherRepository {
 
-    WeatherResponse getDataFromCache(Context context);
+    Observable<WeatherResponse> getData();
 
-    void getDataFromWeb(Context context, CallbackWeather callbackWeather);
-
-    void updateWeatherData(Context context);
+    Observable<WeatherResponse> updateWeatherData();
 }
